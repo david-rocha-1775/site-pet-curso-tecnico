@@ -1,6 +1,6 @@
 <?php 
 error_reporting(E_ALL);
-INI_SET('display',1);
+ini_set('display_errors', 1); 
 include_once 'conexão.php';
 require 'usuario.php';
 require 'pet.php';
@@ -19,53 +19,51 @@ try {
     $usuario = new usuario(
         $conexao,
         ($_POST['nome_usuario']),
-        ($_POST['edereco']),
+        ($_POST['endereco']), 
         ($_POST['telefone']),
         ($_POST['email']),
         ($_POST['senha'])
     );
 
-    $_usuarioID = $usuario -> salvar();
+    $_usuarioID = $usuario->salvar();
     if (!$_usuarioID) {
         throw new Exception("Falha ao cadastrar o usuario ", 1);
     }
 
-    // Cadastro dos pets
-
     if (!empty($_POST['pets']) && is_array($_POST['pets'])) {
+        
         $uploadService = new CadastroService();
 
         foreach ($_POST['pets'] as $i => $pet) {
-            // Validar se o pet possui os dados
             
-            $nome = ($pet['nome_pet']??"");
-            $nome = ($pet['sexo']??"");
-            $nome = ($pet['porte']??"");
-            $nome = ($pet['raca']??"");
+            $nome = trim($pet['nome_pet'] ?? "");
+            $sexo = $pet['sexo'] ?? "";
+            $porte = $pet['porte'] ?? "";
+            $raca = $pet['raca'] ?? "";
 
-            if (!$nome || !$sexo || !$suporte || !$raca) continue; {
-                
-                // Foto do pet
-                $foto = 'img/pet_padrao.jpg';
-                
-                if (!empty($_FILES['pet_fotos']['name'][$i]) && $_FILES ['pet_fotos'] ['error'] [$i] === UPLOAD_ERR_OK ) {
-
-                    $foto = $uploadService -> salvarFoto($_FILES['pet_fotos'],$i) ?: $foto;
-                }
-
-
-                try {
-                    $novoPet = new Pet($conexao, $nome, $porte, $raca, $_usuarioID,$foto);
-                    if ($novoPet ->salvar());
-                } catch (Exception $e) {
-                    echo "Erro ao cadastrar  pet" . $e->getmessage();
-                }
-
+            if (!$nome || !$sexo || !$porte || !$raca) {
+                // Pula este pet se dados básicos estiverem faltando
+                continue;
             }
-        }
-    }
+            $foto = 'img/pet_padrao.jpg'; // Foto padrão
+            
+            if (!empty($_FILES['pet_fotos']['name'][$i]) && $_FILES['pet_fotos']['error'][$i] === UPLOAD_ERR_OK ) {
 
-echo "Cadastro realizado com sucesso";
+                $foto = $uploadService->salvarFoto($_FILES['pet_fotos'], $i) ?: $foto;
+            }
+
+            try {
+                $novoPet = new Pet($conexao, $_usuarioID, $nome, $sexo, $raca, $porte, $foto);
+                $novoPet->salvar(); 
+                
+            } catch (Exception $e) {
+                echo "Erro ao cadastrar o pet '$nome': " . $e->getMessage();
+            }
+            
+        }
+    } 
+
+echo "Cadastro realizado com sucesso!";
 header ('Refresh: 2; URL=index.html');
 exit;
 
