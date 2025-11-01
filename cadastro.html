@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="css/cadastro.css">
+</head>
+<body>
+    <form method="post" action="cadastrar.php" enctype="multipart/form-data">
+        <div class="container">
+            <div class="cadastro-form">
+                <fieldset id="form-fieldset">
+                    <h1>Cadastro</h1>
+                    <input type="text" id="nome_usuario" name="nome_usuario" placeholder="Digite seu nome completo" required>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(00) 0000-0000" required>
+                    <input type="text" id="edereco" name="edereco" placeholder="Endereço" required>
+                    <input type="email" id="email" name="email" placeholder="Email" required>
+                    <input type="password" id="senha" name="senha" placeholder="Senha" required>
+                    <input type="password" id="confirmar_senha" name="confirmar_senha" placeholder="Confirmar Senha" required>
+                    
+                    <br>
+
+                    <div id="pets-container">
+                        <div class="pet-section">
+                            <h2>Pet</h2>
+                            <input type="text" id="nome_pet" name="nome_pet" placeholder="Digite o Nome do Pet" required><br>
+                            <label> Sexo do pet: </label>
+                            <label><input type="radio" name="sexo" id="sexo" value="Macho" required>Macho</label>
+                            <label><input type="radio" name="sexo" id="sexo" value="Femea" required>Femea</label>
+                            <br>
+                            <label> Porte: </label>
+                            <label><input type="radio" name="porte" id="porte" value="Pequeno" required>Pequeno</label>
+                            <label><input type="radio" name="porte" id="porte" value="Medio" required>Medio</label>
+                            <label><input type="radio" name="porte" id="porte" value="Grande" required>Grande</label>
+                            <br><br>
+                            <select name="raca" id="raca" required>
+                                <option value="" disabled selected hidden>Escolha uma Raça</option>
+                                <option value="Pincher">Pincher</option>
+                                <option value="Labrador">Labrador</option>
+                                <option value="Golden Retriver">Golden Retriver</option>
+                                <option value="Pastor Alemao">Pastor Alemao</option>
+                            </select>
+                            <br><br>
+                            <label for="foto">Foto do Pet</label>
+                            <input type="file" name="pet_fotos" id="pet_fotos" accept="image/*" required>
+                        </div>
+                    </div>
+                    
+                    <br><br>
+                    <button type="submit">Cadastrar</button>
+                    <button type="reset">Limpar</button>
+                    <button type="button" id="add-pet-btn">Adicionar Pet</button>
+                </fieldset>
+            </div>
+        </div>
+    </form>
+        <script>
+const addPetButton = document.getElementById('add-pet-btn');
+const petsContainer = document.getElementById('pets-container');
+let petCounter = 2;
+addPetButton.addEventListener('click', () => {
+    const newPetSection = document.createElement('div');
+    newPetSection.classList.add('pet-section'); 
+    const newPetHTML = `
+        <hr>
+        <h2>Pet</h2>
+        <input type="text" placeholder="Digite o Nome do Pet" required><br>
+        <label> Sexo do pet: </label>
+        <label><input type="radio" name="Sexo${petCounter}" value="Macho" required>Macho</label>
+        <label><input type="radio" name="Sexo${petCounter}" value="Femea" required>Femea</label>
+        <br>
+        <label> Porte: </label>
+        <label><input type="radio" name="Porte${petCounter}" value="Pequeno" required>Pequeno</label>
+        <label><input type="radio" name="Porte${petCounter}" value="Medio" required>Medio</label>
+        <label><input type="radio" name="Porte${petCounter}" value="Grande" required>Grande</label>
+        <br><br>
+        <select name="Raca${petCounter}" required>
+            <option value="" disabled selected hidden>Escolha uma Raça</option>
+            <option value="Pincher">Pincher</option>
+            <option value="Labrador">Labrador</option>
+            <option value="Golden Retriver">Golden Retriver</option>
+            <option value="Pastor Alemao">Pastor Alemao</option>
+        </select>
+        <br><br>
+        <label>Foto do Pet</label>
+        <input type="file" name="Foto_pet${petCounter}" accept="image/*" required>
+    `;
+    newPetSection.innerHTML = newPetHTML;
+    petsContainer.appendChild(newPetSection);
+    petCounter++;
+});
+    </script>
+</body>
+</html>
