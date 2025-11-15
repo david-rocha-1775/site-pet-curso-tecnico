@@ -1,6 +1,6 @@
 <?php
 session_start();
-include 'conexao.php';
+include 'conexão.php';
 
 class UserAuthenticator {
     private $conexao;
@@ -10,49 +10,45 @@ class UserAuthenticator {
     }
 
     public function authenticate($username, $password){
-        $stmt = $this->conexao->prepare("SELECT usuario_id,senha FROM usuarios WHERE nome =? ");
+        $stmt = $this->conexao->prepare("SELECT id,senha FROM usuarios WHERE nome =? ");
         if (!$stmt) {
-            die("erro no prepare (authenticate):". $this->conexao->error);
+            die("erro no prepare (authenticate):". $this->conexao->errorInfo()[2]);
         }
-        $stmt->bind_param("s",$username);
-        $stmt->execute();
-        $result= $stmt->get_result();
+        $stmt->execute([$username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($result && $result->num_rows >0) {
-            $user = $result->fetch_assoc();
-
+        if ($user) { // Verifica se encontrou um usuário
             //verifica a senha criptogafada
             if (password_verify($password, $user["senha"])) {
-                return $user["usuario_id"];
+                return $user["id"];
             }
         }
         return false;
     }
 
     public function userExists($username){
-        $stmt = $this->conexao_.prepare("SELECT usuario_id FROM usuarios WHERE nome =?");
+        $stmt = $this->conexao->prepare("SELECT id FROM usuarios WHERE nome =?");
         if (!$stmt) {
-             die("Erro no prepare (userExists):" . $this->conexao->error);
+             die("Erro no prepare (userExists):" . $this->conexao->errorInfo()[2]);
         }
-        $stmt->bind_param("s",$username);
-        $stmt->execute();
-        $result= $stmt->get_result();
+        $stmt->execute([$username]);
+        $result = $stmt->fetchColumn();
 
-        return $result && $result->num_rows > 0;
+        return $result > 0;
     }
 }
 
-// Processa o login se o formulario for enviado 
+// Processa o login se o formulario for enviado x
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nome = $_POST["nome"] ?? ``;
-    $senha = $_POST["senha"] ?? ``;
+    $nome = $_POST["nome"] ?? '';
+    $senha = $_POST["senha"] ?? '';
 
     $authenticator = new UserAuthenticator($conexao);
-    if ($auhenticator->userExists($nome)) {
+    if ($authenticator->userExists($nome)) {
         $userId = $authenticator->authenticate($nome,$senha);
 
         if ($userId) {
-            $_SESSION['id_usuario'] = $userId;
+            $_SESSION['id'] = $userId;
             $_SESSION['nome'] = $nome;
 
             //Redireciona para a pagina protegida
@@ -63,7 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo "Senha incorreta. <a herf='index.html'>Tente novamente</a>.";
         }
     }else {
-        echo "servidor não enviou via POST";
+        echo "Usuário não encontrado. ou Senha incorreta.";
         var_dump($_SERVER["REQUEST_METHOD"]);
     }
     
