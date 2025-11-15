@@ -59,8 +59,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             echo "Senha incorreta. <a herf='index.html'>Tente novamente</a>.";
         }
     }else {
-        echo "Usuário não encontrado. ou Senha incorreta.";
-        var_dump($_SERVER["REQUEST_METHOD"]);
+        echo "Usuário não encontrado.";
     }
     
 }
