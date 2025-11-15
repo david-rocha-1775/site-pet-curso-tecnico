@@ -56,7 +56,7 @@ body {
     cursor: pointer;
     text-decoration: none; /* Remover sublinhado de link */
     font-size: 1rem;
-    margin-top: 30px; /* Adiciona um espaço acima, separando da lista */
+    margin-top: 50px; /* Adiciona um espaço acima, separando da lista */
     margin-bottom: 10px; /* Espaço abaixo */
     
     transition: background-color 0.3s;
