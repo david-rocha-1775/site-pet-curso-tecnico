@@ -19,18 +19,18 @@ $pets = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Meus pets</title>
 </head>
 <body>
-    <h1>olá, Seja bem vindo <?php htmlspecialchars($nome);?>!</h1>
+    <h1>olá, Seja bem vindo <?php echo htmlspecialchars($nome);?>!</h1>
     <a href="logout.php">Sair</a>
 
     <h2>Seus pets:</h2>
     <?php if ($pets): ?>
         <?php foreach ($pets as $p): ?>
             <div>
-                <img src="<?php htmlspecialchars($p['foto'] ?:'img/pet_padrao.jpg')?>" alt="<?php htmlspecialchars($p['nome'])?>">
-                <h2><?php htmlspecialchars($p['nome'])?></h2>
-                <p>Raça:<?php htmlspecialchars($p['raca'])?><br>
-                   Sexo:<?php htmlspecialchars($p['sexo'])?><br>
-                   Porte:<?php htmlspecialchars($p['porte'])?>
+                <img src="<?php echo htmlspecialchars($p['foto'] ?:'img/pet_padrao.jpg')?>" alt="<?php htmlspecialchars($p['nome'])?>">
+                <h2><?php echo htmlspecialchars($p['nome'])?></h2>
+                <p>Raça:<?php echo htmlspecialchars($p['raca'])?><br>
+                   Sexo:<?php echo htmlspecialchars($p['sexo'])?><br>
+                   Porte:<?php echo htmlspecialchars($p['porte'])?>
                 </p>
             </div>
             <hr>
