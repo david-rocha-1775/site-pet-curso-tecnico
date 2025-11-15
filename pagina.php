@@ -27,7 +27,6 @@ $pets = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <div class="content-box">
             <h1>olá, Seja bem vindo <?php echo htmlspecialchars($nome);?>!</h1>
-            <a href="logout.php">Sair</a>
 
             <h2>Seus pets:</h2>
             
@@ -49,6 +48,8 @@ $pets = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php else: ?>
                 <p>Você ainda não cadastrou nehum pet.</p>
             <?php endif; ?>
-
-        </div> </div> </body>
+                <a href="logout.php">Sair</a>
+        </div> 
+    </div> 
+</body>
 </html>
